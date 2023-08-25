@@ -1,0 +1,62 @@
+body{
+    background-image: url("../imgs/background.jpg");
+    background-size: cover;
+    background-color: #363636;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.main-container{
+    background-color: rgb(54, 54, 54, 0.85);
+    margin: 5% 10% 10% 10%;
+    padding: 2vw;
+    border-radius: 15px;
+}
+
+.champion-selection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.champion-prechosen{
+    font-size: 1.5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    color: white;
+}
+
+.pick-button{
+    font-size: 1vw;
+    user-select: none;
+    background-color: green;
+    border: solid black 4px;
+    padding: 1vw;
+    width: 10vw;
+    text-align: center;
+    border-radius: 100px;
+    font-weight: bold;
+    margin-top: 2vw;
+    transition: .4s;
+}
+
+.pick-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.pick-button:active{
+    background-color: black;
+    color: white;
+    transition: 0s;
+}
+
+
