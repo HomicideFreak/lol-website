@@ -63,7 +63,7 @@ const allChampion = [
     "Kindred",
     "Kled",
     "KogMaw",
-    "Ksante",
+    "KSante",
     "Leblanc",
     "LeeSin",
     "Leona",
@@ -165,6 +165,8 @@ const allChampion = [
     "Zyra"   
 ];
 
+
+
 var champChosen;
 function roll(){
     champChosen = setChampionIcon();
@@ -182,12 +184,8 @@ function roll(){
 
 
 function setChampionIcon(){
-    var rollIcon = document.getElementById("roll-icon");
-    var rollName = document.getElementsByClassName("champion-name");
     var randomNum = Math.floor(Math.random() * allChampion.length);
     var roll = allChampion[randomNum];
-    rollIcon.src = `imgs/champion/${roll}.png`;
-    rollName[0].innerHTML = roll;
     return roll;
 }
 
@@ -195,6 +193,11 @@ function setChampionIcon(){
 if(window.location.pathname.includes("champion-roll.html")){
     var rollButton = document.querySelector(".roll-button");
     rollButton.addEventListener("click", roll);
+    var goBackButton = document.getElementsByClassName("go-back-champion-roll");
+    goBackButton[0].addEventListener("click", ()=>{
+        window.location.href = "index.html";
+    });
+    
     
     var greenButtons = document.getElementsByClassName("side-menu-button");
     greenButtons[1].addEventListener("click", () => {
@@ -222,64 +225,61 @@ if(window.location.pathname.includes("champion-roll.html")){
     });
 }
 
-
-
-
-document.addEventListener("DOMContentLoaded", ()=>{
     
-    if(window.location.pathname.includes("skin-roll.html")){
-        function chooseBoxfnc() {
-            var chooseBox = document.getElementsByClassName("choose-box")[0];
-            var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
-            championPrechosenToggle.classList.toggle("active");
-            var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
-            pickButtonToggle.classList.toggle("active");
+if(window.location.pathname.includes("skin-roll.html")){
+    function chooseBoxfnc() {
+        var chooseBox = document.getElementsByClassName("choose-box")[0];
+        var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
+        championPrechosenToggle.classList.toggle("active");
+        var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
+        pickButtonToggle.classList.toggle("active");
+        for (let i = 0; i < allChampion.length; i++) {
+            var imgElement = document.createElement("img");
+            imgElement.src = `imgs/champion/${allChampion[i]}.png`;
+            imgElement.classList.add('choose-box-champion');
+            chooseBox.appendChild(imgElement);
             
-            for (let i = 0; i < allChampion.length; i++) {
-                var imgElement = document.createElement("img");
-                imgElement.src = `imgs/champion/${allChampion[i]}.png`;
-                imgElement.classList.add('choose-box-champion');
-                chooseBox.appendChild(imgElement);
-                
-                imgElement.addEventListener("click", () => {
-                    var pickedChampion = allChampion[i];
-                    var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
-                    championPrechosenToggle.classList.toggle("active");
-                    var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
-                    pickButtonToggle.classList.toggle("active");
-                    var championPrechosenImg = document.getElementsByClassName("champion-prechosen-img")[0];
-                    championPrechosenImg.src = `imgs/champion/${pickedChampion}.png`;
-                    var pickedChampionName = document.getElementsByClassName("champion-prechosen-name")[0];
-                    pickedChampionName.innerHTML = pickedChampion;
-                    localStorage.setItem("rolledChamp", pickedChampion);
+            imgElement.addEventListener("click", () => {
+                var pickedChampion = allChampion[i];
+                var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
+                championPrechosenToggle.classList.toggle("active");
+                var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
+                pickButtonToggle.classList.toggle("active");
+                var championPrechosenImg = document.getElementsByClassName("champion-prechosen-img")[0];
+                championPrechosenImg.src = `imgs/champion/${pickedChampion}.png`;
+                var pickedChampionName = document.getElementsByClassName("champion-prechosen-name")[0];
+                pickedChampionName.innerHTML = pickedChampion;
+                localStorage.setItem("rolledChamp", pickedChampion);
 
-                    
-                    // Remove the dynamically created images after clicking
-                    var allChampionImg = document.getElementsByClassName("choose-box-champion");
-                    for (let j = allChampionImg.length - 1; j >= 0; j--) {
-                        allChampionImg[j].remove();
-                    }
-                    location.reload();
-                });
-            }
+                
+                // Remove the dynamically created images after clicking
+                var allChampionImg = document.getElementsByClassName("choose-box-champion");
+                for (let j = allChampionImg.length - 1; j >= 0; j--) {
+                    allChampionImg[j].remove();
+                }
+                location.reload();
+            });
         }
-        if(localStorage.getItem("rolledChamp") !== undefined){
-            fetchChampion();
-            
-        } else{
-            console.log("You must either roll or choose a champion first.");
-        }
-        var pickButton = document.getElementsByClassName("pick-button");
-        pickButton[0].addEventListener("click", chooseBoxfnc);
     }
-});
+    if(localStorage.getItem("rolledChamp") !== undefined){
+        fetchChampion();
+        
+    } else{
+        console.log("You must either roll or choose a champion first.");
+    }
+    var pickButton = document.getElementsByClassName("pick-button");
+    pickButton[0].addEventListener("click", chooseBoxfnc);
+}
 
 function fetchChampion(){
     var rolledChampion = localStorage.getItem("rolledChamp");
     var championPrechosenImg = document.getElementsByClassName("champion-prechosen-img")[0];
-    championPrechosenImg.src = `imgs/champion/${rolledChampion}.png`;
     var pickedChampionName = document.getElementsByClassName("champion-prechosen-name")[0];
-    pickedChampionName.innerHTML = rolledChampion;
+    if (localStorage.getItem("rolledChamp") !== null){
+
+        championPrechosenImg.src = `imgs/champion/${rolledChampion}.png`;
+        pickedChampionName.innerHTML = rolledChampion;
+    }
     fetch(`json/${rolledChampion}.json`)
     .then(response => response.json())
     .then(data => {
@@ -368,7 +368,6 @@ function fetchChampion(){
 
                 sideMenuGreenButton[0].addEventListener("click", ()=>{
                     var rolledSkinIndex = Math.floor(Math.random() * skinArray.length);
-                //var objIndexInIndexArray = indexArray[skinArray[rolledSkinIndex]];
                     var targetSkinName = skinArray[rolledSkinIndex];
                     var targetIndex;
 
@@ -393,7 +392,6 @@ function fetchChampion(){
 
             });
         })
-        
         
 }
 
