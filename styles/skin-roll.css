@@ -11,9 +11,11 @@ body{
 
 .main-container{
     background-color: rgb(54, 54, 54, 0.85);
-    margin: 5% 10% 10% 10%;
+    margin: 5% 10% 2% 10%;
     padding: 2vw;
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .champion-selection{
@@ -34,17 +36,18 @@ body{
 }
 
 .pick-button{
-    font-size: 1vw;
+    font-size: 1.5vw;
     user-select: none;
     background-color: green;
     border: solid black 4px;
     padding: 1vw;
-    width: 10vw;
+    width: 15vw;
     text-align: center;
     border-radius: 100px;
     font-weight: bold;
     margin-top: 2vw;
     transition: .4s;
+    color: white;
 }
 
 .pick-button:hover{
@@ -59,4 +62,288 @@ body{
     transition: 0s;
 }
 
+.pick-button.active{
+    display: none;
+}
 
+.champion-prechosen.active{
+    display:none;
+}
+
+.choose-box{
+    display: flex;
+    padding: 2vw;
+    flex-wrap: wrap;
+}
+
+.choose-box-champion{
+    width: 4rem;
+    height: 4rem;
+}
+
+.choose-box-champion:hover{
+    transition: 0.2s;
+    filter: brightness(1.8);
+    cursor: pointer;
+}
+
+.skin-board{
+    background-color: rgb(54, 54, 54, 0.85);
+    padding: 2vw;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2vw;
+    flex-wrap: wrap;
+}
+
+.skin-img-element{
+    height: 20vw;
+    width: 10vw;
+}
+
+.skin-name{
+    font-size: 1vw;
+    color: white;
+    text-align: center;
+    width: 10vw;
+}
+
+.skin-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.skin-img-element:hover{
+    cursor: pointer;
+    user-select: none;
+    filter: brightness(1.8);
+}
+
+.skin-img-element.active{
+    opacity: 0.2;
+}
+
+.roll-skin-button{
+    font-size: 1.5vw;
+    user-select: none;
+    background-color: green;
+    border: solid black 4px;
+    padding: 1vw;
+    width: 15vw;
+    text-align: center;
+    border-radius: 100px;
+    font-weight: bold;
+    margin: 2vw 0 2vw 0;
+    transition: .4s;
+    color: white;
+}
+
+.roll-skin-button-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.roll-skin-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.roll-skin-button:active{
+    background-color: black;
+    color: white;
+    transition: 0s;
+}
+
+.skin-chosen{
+    display:none;
+}
+
+.rolled-skin-img{
+    height: 40vw;
+    width: 20vw;
+}
+
+.champion-selection.active{
+    display:none;
+}
+
+.skin-board.active{
+    display:none;
+}
+
+
+.skin-chosen.active{
+    display: flex;
+    flex-direction: column;
+    gap: 2vw;
+    font-size: 2vw;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(54, 54, 54, 0.85);
+    animation: popOutAnimation 0.8s linear;
+    padding: 3vw;
+    border-radius: 15px;
+    width: 25vw;
+    align-self: stretch;
+}
+
+.main-container.active{
+    background-color: rgba(54, 54, 54, 0);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3vw;
+    height: 100%;
+}
+
+.rolled-skin-name{
+    font-size: 1.5vw;
+    color: white;
+    white-space: nowrap;
+}
+
+.side-menu{
+    display: none;
+}
+
+.side-menu.active{
+    background-color: rgba(54, 54, 54, 0.85);
+    align-self: stretch;
+    padding: 3vw;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    animation: sideMenuSlide 0.4s linear;
+}
+
+.roll-skin-button.active{
+    display:none;
+}
+
+.side-menu-skin-button{
+    font-size: 1.5vw;
+    user-select: none;
+    background-color: green;
+    border: solid black 4px;
+    padding: 1vw;
+    width: 15vw;
+    text-align: center;
+    border-radius: 100px;
+    font-weight: bold;
+    margin: 2vw 0 2vw 0;
+    transition: .4s;
+    color: white;
+}
+
+.side-menu-skin-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.side-menu-skin-button:active{
+    background-color: black;
+    color: white;
+    transition: 0s;
+}
+
+.side-menu-skin-go-back-button{
+    font-size: 1.5vw;
+    user-select: none;
+    background-color: red;
+    border: solid black 4px;
+    padding: 1vw;
+    width: 15vw;
+    text-align: center;
+    border-radius: 100px;
+    font-weight: bold;
+    margin: 2vw 0 2vw 0;
+    transition: .4s;
+    color: white;
+}
+
+.side-menu-skin-go-back-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.side-menu-skin-go-back-button:active{
+    background-color: black;
+    color: white;
+    transition: 0s;
+}
+
+.go-back-skin-button{
+    font-size: 1.5vw;
+    user-select: none;
+    background-color: red;
+    border: solid black 4px;
+    padding: 1vw;
+    width: 15vw;
+    text-align: center;
+    border-radius: 100px;
+    font-weight: bold;
+    margin: 2vw 0 2vw 0;
+    transition: .4s;
+    color: white;
+}
+
+.go-back-skin-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.go-back-skin-button:active{
+    background-color: black;
+    color: white;
+    transition: 0s;
+}
+
+@keyframes popOutAnimation {
+    0%{
+        opacity: 0;
+        transform: scale(0%);
+    }
+
+    50%{
+        opacity: 1;
+        transform: scale(100%);
+    }
+
+    75%{
+        opacity: 1;
+        transform: scale(110%);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(100%);
+    }
+}
+
+@keyframes sideMenuSlide{
+    0%{
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

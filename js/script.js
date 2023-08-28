@@ -165,38 +165,9 @@ const allChampion = [
     "Zyra"   
 ];
 
-fetch("json/Aatrox.json")
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error("Error fetching or parsing JSON:", error)
-    });
-
-function championSkipRoll(){
-    return new Promise (resolve =>{
-        var delayer = 0.5;
-        for (let i = 0; i < 30; i++) {
-            setTimeout(setChampionIcon, i * 100 * delayer);
-            delayer += 0.05;
-        }
-        setTimeout(() => {
-            resolve();
-        }, 30 * 100 * 0.5 + 5000);
-    });
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-
-async function rollAnimation(){
-    await championSkipRoll();
-    var champChosen = setChampionIcon();
-    console.log(champChosen);
-    await sleep(1000);
+var champChosen;
+function roll(){
+    champChosen = setChampionIcon();
     var chosenImg = document.getElementById("champion-chosen-img");
     chosenImg.setAttribute("src", `imgs/loading/${champChosen}_0.jpg`);
     var chosenName = document.getElementsByClassName("chosen-champion-name");
@@ -207,8 +178,8 @@ async function rollAnimation(){
     champRollSection[0].classList.toggle("active");
     var sideMenu = document.getElementsByClassName("side-menu");
     sideMenu[0].classList.toggle("active");
-
 }
+
 
 function setChampionIcon(){
     var rollIcon = document.getElementById("roll-icon");
@@ -217,36 +188,214 @@ function setChampionIcon(){
     var roll = allChampion[randomNum];
     rollIcon.src = `imgs/champion/${roll}.png`;
     rollName[0].innerHTML = roll;
-    console.log(randomNum);
-    console.log(rollIcon.src);
     return roll;
 }
 
 
-var rollButton = document.querySelector(".roll-button");
-rollButton.addEventListener("click", rollAnimation);
+if(window.location.pathname.includes("champion-roll.html")){
+    var rollButton = document.querySelector(".roll-button");
+    rollButton.addEventListener("click", roll);
+    
+    var greenButtons = document.getElementsByClassName("side-menu-button");
+    greenButtons[1].addEventListener("click", () => {
+        localStorage.setItem("rolledChamp", champChosen);
+        window.location.href = "skin-roll.html";
+        console.log(localStorage.getItem("rolledChamp"));
+    });
+    greenButtons[2].addEventListener("click", () => {
+        window.location.href = "item-roll.html";
+    });
+    
+    var redButton = document.getElementsByClassName("side-menu-go-back-button");
+    redButton[0].addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+    
+    greenButtons[0].addEventListener("click", ()=>{
+        champChosen = setChampionIcon();
+        var chosenImg = document.getElementById("champion-chosen-img");
+        chosenImg.setAttribute("src", `imgs/loading/${champChosen}_0.jpg`);
+        var chosenName = document.getElementsByClassName("chosen-champion-name");
+        chosenName[0].innerHTML = champChosen;
+        localStorage.setItem("rolledChamp", champChosen);
+        console.log(localStorage.getItem("rolledChamp"));
+    });
+}
 
-var greenButtons = document.getElementsByClassName("side-menu-button");
-greenButtons[1].addEventListener("click", () => {
-    window.location.href = "skin-roll.html";
-});
-greenButtons[2].addEventListener("click", () => {
-    window.location.href = "item-roll.html";
+
+
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    
+    if(window.location.pathname.includes("skin-roll.html")){
+        function chooseBoxfnc() {
+            var chooseBox = document.getElementsByClassName("choose-box")[0];
+            var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
+            championPrechosenToggle.classList.toggle("active");
+            var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
+            pickButtonToggle.classList.toggle("active");
+            
+            for (let i = 0; i < allChampion.length; i++) {
+                var imgElement = document.createElement("img");
+                imgElement.src = `imgs/champion/${allChampion[i]}.png`;
+                imgElement.classList.add('choose-box-champion');
+                chooseBox.appendChild(imgElement);
+                
+                imgElement.addEventListener("click", () => {
+                    var pickedChampion = allChampion[i];
+                    var championPrechosenToggle = document.getElementsByClassName("champion-prechosen")[0];
+                    championPrechosenToggle.classList.toggle("active");
+                    var pickButtonToggle = document.getElementsByClassName("pick-button")[0];
+                    pickButtonToggle.classList.toggle("active");
+                    var championPrechosenImg = document.getElementsByClassName("champion-prechosen-img")[0];
+                    championPrechosenImg.src = `imgs/champion/${pickedChampion}.png`;
+                    var pickedChampionName = document.getElementsByClassName("champion-prechosen-name")[0];
+                    pickedChampionName.innerHTML = pickedChampion;
+                    localStorage.setItem("rolledChamp", pickedChampion);
+
+                    
+                    // Remove the dynamically created images after clicking
+                    var allChampionImg = document.getElementsByClassName("choose-box-champion");
+                    for (let j = allChampionImg.length - 1; j >= 0; j--) {
+                        allChampionImg[j].remove();
+                    }
+                    location.reload();
+                });
+            }
+        }
+        if(localStorage.getItem("rolledChamp") !== undefined){
+            fetchChampion();
+            
+        } else{
+            console.log("You must either roll or choose a champion first.");
+        }
+        var pickButton = document.getElementsByClassName("pick-button");
+        pickButton[0].addEventListener("click", chooseBoxfnc);
+    }
 });
 
-var redButton = document.getElementsByClassName("side-menu-go-back-button");
-redButton[0].addEventListener("click", () => {
-    window.location.href = "index.html";
-});
+function fetchChampion(){
+    var rolledChampion = localStorage.getItem("rolledChamp");
+    var championPrechosenImg = document.getElementsByClassName("champion-prechosen-img")[0];
+    championPrechosenImg.src = `imgs/champion/${rolledChampion}.png`;
+    var pickedChampionName = document.getElementsByClassName("champion-prechosen-name")[0];
+    pickedChampionName.innerHTML = rolledChampion;
+    fetch(`json/${rolledChampion}.json`)
+    .then(response => response.json())
+    .then(data => {
+            var skinArray = [];
+            var indexArray = [];
+            var skinBoard = document.getElementsByClassName("skin-board");
+            for (let i = 0; i < data.data[rolledChampion].skins.length; i++) {
+                var skinObject = data.data[rolledChampion].skins[i].name;
+                skinArray[i] = skinObject;
+                var skinIndexObject = {
+                    [data.data[rolledChampion].skins[i].name] : i,
+                    imgsrc : `imgs/loading/${rolledChampion}_${data.data[rolledChampion].skins[i].num}.jpg`,
+                    [i] : data.data[rolledChampion].skins[i].name
+                };
+                indexArray[i] = skinIndexObject;
+                var newDivContainer = document.createElement("div");
+                var newSkinName = document.createElement("div");
+                var newSkinImg = document.createElement("img");
+                skinBoard[0].appendChild(newDivContainer);
+                newDivContainer.appendChild(newSkinImg);
+                newDivContainer.appendChild(newSkinName);
+                newSkinImg.src = `imgs/loading/${rolledChampion}_${data.data[rolledChampion].skins[i].num}.jpg`;
+                newSkinImg.addEventListener("click", () => {
+                    var pickedSkin = document.getElementsByClassName("skin-img-element")[i];
+                    var pickedSkinName = document.getElementsByClassName("skin-name")[i];
+                    pickedSkin.classList.toggle("active");
+                    if(skinArray.includes(pickedSkinName.innerHTML)){
+                        skinArray.splice(skinArray.indexOf(pickedSkinName.innerHTML), 1);
+                    }else{
+                        var counter = 0;
+                        for (let j = 0; j < indexArray[i][pickedSkinName.innerHTML]; j++) {
+                            if(skinArray.includes(indexArray[j][j])){
+                                counter+=1;
+                            }
+                        }
+                        skinArray.splice(counter, 0, pickedSkinName.innerHTML);
+                    }
+                });
+                
+                newDivContainer.classList.add("skin-container");
+                newSkinImg.classList.add("skin-img-element");
+                newSkinName.classList.add("skin-name");
+                newSkinName.innerHTML = data.data[rolledChampion].skins[i].name;
+            }
+            var rollSkinButton = document.getElementsByClassName("roll-skin-button");
+            var rollSkinGoBackButton = document.getElementsByClassName("go-back-skin-button");
+            var rolledSkinImg = document.createElement("img");
+            var rolledSkinName = document.createElement("div");
+            rolledSkinImg.classList.add("rolled-skin-img");
+            rollSkinGoBackButton[0].addEventListener("click", ()=>{
+                window.location.href = "index.html";
+            })
 
-greenButtons[0].addEventListener("click", ()=>{
-    var sideMenu = document.getElementsByClassName("side-menu");
-    var champChosenSection = document.getElementsByClassName("champion-chosen");
-    var champRollSection = document.getElementsByClassName("champion-roll");
-    sideMenu[0].classList.remove("active");
-    champChosenSection[0].classList.remove("active");
-    champRollSection[0].classList.remove("active");
-});
+            rollSkinButton[0].addEventListener("click", ()=>{
+                var championSelection = document.getElementsByClassName("champion-selection");
+                var skinBoard = document.getElementsByClassName("skin-board");
+                championSelection[0].classList.toggle("active");
+                skinBoard[0].classList.toggle("active");
+                console.log(skinArray);
+                var rolledSkinIndex = Math.floor(Math.random() * skinArray.length);
+                //var objIndexInIndexArray = indexArray[skinArray[rolledSkinIndex]];
+                var targetSkinName = skinArray[rolledSkinIndex];
+                var targetIndex;
+
+                for (let k = 0; k < indexArray.length; k++) {
+                    if(indexArray[k][k] === targetSkinName){
+                        targetIndex = indexArray[k][targetSkinName];
+                    }
+                }
+                console.log(targetIndex);
+                rolledSkinImg.src = indexArray[targetIndex].imgsrc;
+                rolledSkinName.innerHTML = skinArray[rolledSkinIndex];
+                console.log(skinArray[rolledSkinIndex]);
+                var skinChosenContainer = document.getElementsByClassName("skin-chosen");
+                var mainContainer = document.getElementsByClassName("main-container");
+                var sideMenu = document.getElementsByClassName("side-menu");
+                var sideMenuGreenButton = document.getElementsByClassName("side-menu-skin-button");
+                var sideMenuGoBackButton = document.getElementsByClassName("side-menu-skin-go-back-button");
+                rollSkinButton[0].classList.toggle("active");
+                rolledSkinName.classList.add("rolled-skin-name");
+                skinChosenContainer[0].appendChild(rolledSkinImg);
+                skinChosenContainer[0].appendChild(rolledSkinName);
+                skinChosenContainer[0].classList.toggle("active");
+                mainContainer[0].classList.toggle("active");
+                sideMenu[0].classList.toggle("active");
+
+                sideMenuGreenButton[0].addEventListener("click", ()=>{
+                    var rolledSkinIndex = Math.floor(Math.random() * skinArray.length);
+                //var objIndexInIndexArray = indexArray[skinArray[rolledSkinIndex]];
+                    var targetSkinName = skinArray[rolledSkinIndex];
+                    var targetIndex;
+
+                    for (let k = 0; k < indexArray.length; k++) {
+                        if(indexArray[k][k] === targetSkinName){
+                            targetIndex = indexArray[k][targetSkinName];
+                        }
+                    }
+                    console.log(targetIndex);
+                    rolledSkinImg.src = indexArray[targetIndex].imgsrc;
+                    rolledSkinName.innerHTML = skinArray[rolledSkinIndex];
+                })
+                sideMenuGreenButton[1].addEventListener("click", ()=>{
+                    window.location.href = "champion-roll.html"
+                })
+                sideMenuGreenButton[2].addEventListener("click", ()=>{
+                    window.location.href = "item-roll.html"
+                })
+                sideMenuGoBackButton[0].addEventListener("click", ()=>{
+                    window.location.href = "skin-roll.html";
+                })
+
+            });
+        })
+        
+        
+}
 
 
 

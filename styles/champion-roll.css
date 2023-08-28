@@ -107,14 +107,20 @@ body{
     padding: 1vw;
     border: black solid 2px;
     border-radius: 100px;
+    width: 15vw;
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
+    text-align: center;
+    font-weight: bold;
 }
 
 .side-menu-go-back-button{
     background-color: red;
     font-size: 1.5vw;
+    width: 16vw;
+    font-weight: bold;
+    text-align: center;
     color: white;
     padding: 1vw;
     border: black solid 2px;

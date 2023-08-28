@@ -4,21 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/skin-roll.css">
+    <link rel="icon" href="imgs/icon.png" type="image/x-icon">
     <title>LoL - Skin Roll</title>
 </head>
 <body>
     <div class="main-container">
         <div class="champion-selection">
             <div class="champion-prechosen">
-                <div class="chosen-champion-info">Champion Rolled:</div>
-                <img alt="champion-prechosen" id="champion-prechosen" src="imgs/qmark.jpg" height="120" width="120">
+                <div class="chosen-champion-info">Champion Rolled/Picked:</div>
+                <img alt="champion-prechosen" class="champion-prechosen-img" src="imgs/qmark.jpg" height="120" width="120">
                 <div class="champion-prechosen-name">?</div>
             </div>
             <div class="choose-box">
                 <div class="pick-button">Choose Champion</div>
             </div>
         </div>
+        <div class="skin-chosen"></div>
+        <div class="side-menu">
+            <div class="side-menu-skin-button">Roll Again</div>
+            <div class="side-menu-skin-button">Roll Champion</div>
+            <div class="side-menu-skin-button">Item Roll (Not Done)</div>
+            <div class="side-menu-skin-go-back-button">Go Back</div>
+        </div>
     </div>
+    <div class="roll-skin-button-container">
+        <div class="roll-skin-button">Roll Skin</div>
+        <div class="go-back-skin-button">Go Back</div>
+    </div>
+    <div class="skin-board"></div>
+
     <script src="js/script.js"></script>
 </body>
 </html>
